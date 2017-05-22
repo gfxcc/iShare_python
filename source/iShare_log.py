@@ -13,7 +13,10 @@ class Log(object):
     def __del__(self):
         print('%10s OUT', self.msg)
 
-    def _print(self, level, msg):
+    def print_log(self, level, msg):
         print strftime("%Y-%m-%d %H:%M:%S ", gmtime())
+        print ('[%6s]:%s', level, msg)
 
-a = Log(1)
+    def omit_syntax(self):
+        pass
+
