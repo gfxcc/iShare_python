@@ -1,0 +1,328 @@
+//
+//
+//
+syntax = "proto3";
+
+option java_package = "io.grpc.examples";
+
+package helloworld;
+
+service Synchronism {
+// do no need update
+// A server-to-client streaming RPC
+//
+// start after terminal finish basic work. keep synchronism with S
+// input    User.username
+// output   User.synchronism<friend, bill, delete, request>
+rpc Syn (Inf) returns (stream Syn_data) {}
+
+}
+
+// The greeting service definition.
+service Greeter {
+// Sends a greeting
+rpc SayHello (HelloRequest) returns (HelloReply) {}
+
+//
+//
+//
+//rpc TimeTest (Inf) returns (stream Inf) {}
+
+// updated
+// A simple RPC
+// login_m(usename, password)
+// Reply_inf(status, information) : status(CANCALLED, OK) : information(reason why CANCALLED or user_id);
+// replye->information can be used as notice
+// login rpc
+rpc Login (Login_m) returns (Reply_inf) {}
+
+
+// updated
+// A simple RPC
+// sign_m(username, password, email)
+// Reply_inf(status, information) : status(CANCALLED, OK) : information(reason why CANCALLED or user_id);
+// sign in rpc
+rpc Sign_up (Sign_m) returns (Reply_inf) {}
+
+
+// updated
+// A simple RPC
+//
+// input    user_id
+// output   username, user_id, email, friends_name, friends_id
+rpc User_inf (Inf) returns (User_detail) {}
+
+// do not need update
+//
+// A simple RPC
+//
+// search user by username
+rpc Search_username (Inf) returns (Search_result) {}
+
+
+// updated
+// A simple RPC
+// input username
+//
+// add new friend
+rpc Add_friend (Repeated_string) returns (Inf) {}
+
+// updated
+// A simple RPC
+// input user_id
+//
+// delete a friend
+rpc Delete_friend (Repeated_string) returns (Inf) {}
+
+// updated
+// A simple RPC
+//
+// create a new share record
+rpc Create_share (Share_inf) returns (Inf) {}
+
+// updated
+// delete a bill
+//
+// use bill_id to identify bill record
+rpc Delete_bill (Share_inf) returns (Inf) {}
+
+// updated
+//
+//
+// input username amount(??? / all)
+// output Bills()
+rpc Obtain_bills (Bill_request) returns (stream Share_inf) {}
+
+// do not need to update
+//
+//
+// input Three byte package imageNmae, imagePath, imageData
+// output "Get image"
+rpc Send_Img (stream Image) returns (Inf) {}
+
+// do not need update
+//
+//
+// input folderName - imageName - imageName -.........
+// outut Image bytes package filled data and name
+rpc Receive_Img (Repeated_string) returns (stream Image) {}
+
+// updated
+// set user synchronism_delete = 0
+// 
+// 
+rpc Reset_Status (Inf) returns (Inf) {}
+
+// updated
+// # request system rpc
+// send request. add friend or payment
+// enum-type : friendInvite, payment
+// from, to use username rather than userID
+// content formate SENDER:%@ RECEVER:%@ FIRSTID:%@ LASTID:%@ COUNT:%ld
+// sender or receiver is uername
+rpc Send_request (Request) returns (Inf) {}
+
+
+// updated
+// Inf contain user_id
+// 
+// 
+rpc Obtain_request (Inf) returns (stream Request) {}
+
+// updated
+//  return requestLog has not been read
+// 
+// 
+rpc Obtain_requestLog (Inf) returns (stream Request) {}
+
+// updated
+// return all requestLog
+// 
+// 
+rpc Obtain_requestLogHistory (Inf) returns (stream Request) {}
+
+// updated
+// 
+// 
+// 
+rpc Request_response (Response) returns (Inf) {}
+
+// do not nedd update
+// 
+// 
+// 
+rpc MakePayment (stream BillPayment) returns (Inf) {}
+
+// updated
+// 
+// 
+// 
+rpc IgnoreRequestLog (IgnoreMessage) returns (Inf) {}
+
+// 
+// 
+// 
+rpc Create_requestLog (Request) returns (Inf) {}
+
+// updated
+// 
+// 
+// 
+rpc Send_DeviceToken (Repeated_string) returns (Inf) {}
+
+// send username
+//
+//
+rpc Obtain_setting (Inf) returns (Setting) {}
+
+//
+//
+//
+rpc Reset_setting (Setting) returns (Inf) {}
+
+//
+//
+//
+rpc Reset_userInfo (UserInfo) returns (Inf) {}
+
+//
+//
+//
+rpc Obtain_userInfo (Inf) returns (UserInfo) {}
+
+//
+//
+//
+rpc Update_user_lastModified (Inf) returns (Inf) {}
+}
+
+// The request message contain username and password
+message Login_m {
+string username = 1;
+string password = 2;
+}
+
+message Sign_m {
+string username = 1;
+string password = 2;
+string email = 3;
+}
+
+message Inf {
+string information = 1;
+}
+
+message Repeated_string {
+repeated string content = 1;
+}
+
+message Search_result {
+repeated string username = 1;
+repeated string user_id = 2;
+repeated bytes user_icon = 3;
+}
+
+message User_detail {
+string username = 1;
+string user_id = 2;
+string email = 3;
+repeated string friends_name = 4;
+repeated string friends_id = 5;
+repeated string friends_lastModified = 6;
+}
+
+message Share_inf {
+string creater = 1;
+string amount = 2;
+string type = 3;
+string paidBy = 4;
+string data = 5;
+string note = 6;
+string image = 7;
+repeated string members = 8;
+int32 members_count = 9;
+string bill_id = 10;
+string paidStatus = 11;
+string typeIcon = 12;
+}
+
+message Bill_request {
+string username = 1;
+string start = 2;
+string amount = 3;
+}
+
+message Syn_data {
+string friend = 1;
+string bill = 2;
+string delete = 3;
+string request = 4;
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+string message = 1;
+}
+
+message Image {
+string name = 1;
+bytes data = 2;
+}
+
+message Request {
+string request_id = 1;
+string sender = 2;
+string receiver = 3;
+string type = 4;
+string content = 5;
+string response = 6;
+string request_date = 7;
+string response_date = 8;
+string ignore_from = 9;
+string ignore_to = 10;
+}
+
+message Response {
+string request_id = 1;
+string sender = 2;
+string receiver = 3;
+string response = 4;
+string response_date = 5;
+}
+
+message IgnoreMessage {
+string requestLog_id = 1;
+string user = 2;
+}
+
+message BillPayment {
+string bill_id = 1;
+string paidStatus = 2;
+}
+
+message Setting {
+int32 friendInvite = 1;
+int32 newBill = 2;
+int32 editedDeleteBill = 3;
+int32 commentBill = 4;
+int32 paidNotice = 5;
+string user_id = 6;
+}
+
+message UserInfo {
+string user_id = 1;
+string username = 2;
+string password = 3;
+string email = 4;
+int32 currency = 5;
+}
+
+message Reply_inf {
+string status = 1;
+string information = 2;
+}
